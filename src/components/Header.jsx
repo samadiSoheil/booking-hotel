@@ -2,6 +2,10 @@ import { MdLocationOn } from "react-icons/md";
 import { HiCalendar, HiMinus, HiPlus, HiSearch } from "react-icons/hi";
 import { useRef, useState } from "react";
 import useOutsideClick from "../hooks/useOutsideClick";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import { DateRangePicker } from "react-date-range";
+import { format } from "date-fns/esm";
 
 export default function Header() {
   const [openOptions, setOpenOptions] = useState(false);
@@ -19,6 +23,18 @@ export default function Header() {
       };
     });
   };
+
+  // Date Peaker States
+  const [date, setDate] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
+  const [openDate, setOpenDate] = useState(false);
+  const dateRef = useRef();
+  useOutsideClick(dateRef, "datePeaker", () => setOpenDate(false));
 
   return (
     <div className="header">
@@ -39,7 +55,25 @@ export default function Header() {
         {/* ----- DATE PEAKER ----- */}
         <div className="headerSearchItem">
           <HiCalendar className="headerIcon dateIcon" />
-          <div className="dateDropDown">2023/06/34</div>
+          <div
+            ref={dateRef}
+            id="datePeaker"
+            onClick={() => setOpenDate((is) => !is)}
+            className="dateDropDown"
+          >
+            {`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
+              date[0].endDate,
+              "MM/dd/yyyy"
+            )}`}
+          </div>
+          {openDate && (
+            <DateRangePicker
+              onChange={(item) => setDate([item.selection])}
+              ranges={date}
+              minDate={new Date()}
+              className="date"
+            />
+          )}
           <span className="seperator"></span>
         </div>
 
