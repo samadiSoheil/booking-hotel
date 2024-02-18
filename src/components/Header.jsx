@@ -33,8 +33,6 @@ export default function Header() {
     },
   ]);
   const [openDate, setOpenDate] = useState(false);
-  const dateRef = useRef();
-  useOutsideClick(dateRef, "datePeaker", () => setOpenDate(false));
 
   return (
     <div className="header">
@@ -55,12 +53,7 @@ export default function Header() {
         {/* ----- DATE PEAKER ----- */}
         <div className="headerSearchItem">
           <HiCalendar className="headerIcon dateIcon" />
-          <div
-            ref={dateRef}
-            id="datePeaker"
-            onClick={() => setOpenDate((is) => !is)}
-            className="dateDropDown"
-          >
+          <div onClick={() => setOpenDate((is) => !is)} className="dateDropDown">
             {`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
               date[0].endDate,
               "MM/dd/yyyy"
