@@ -6,8 +6,10 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRangePicker } from "react-date-range";
 import { format } from "date-fns/esm";
+import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 
 export default function Header() {
+  const [destination, setDestination] = useState("");
   const [openOptions, setOpenOptions] = useState(false);
   const [options, setOptions] = useState({
     adult: 1,
@@ -34,6 +36,21 @@ export default function Header() {
   ]);
   const [openDate, setOpenDate] = useState(false);
 
+  // Search Handler
+  const navigate = useNavigate();
+  // const [searchParams, setSearchParams] = useSearchParams();
+  const handleSearch = () => {
+    const encodedParams = createSearchParams({
+      date: JSON.stringify(date),
+      destination,
+      options: JSON.stringify(options),
+    });
+    // setSearchParams(encodedParams);
+    navigate({
+      pathname: "/hotels",
+      search: encodedParams.toString(),
+    });
+  };
   return (
     <div className="header">
       <div className="headerSearch">
@@ -41,6 +58,8 @@ export default function Header() {
         <div className="headerSearchItem">
           <MdLocationOn className="headerIcon locationIcon" />
           <input
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}
             type="text"
             placeholder="where to go?"
             className="headerSearchInput"
@@ -88,7 +107,7 @@ export default function Header() {
 
         {/* ----- SEARCH BUTTON ----- */}
         <div className="headerSearchItem">
-          <button className="headerSearchBtn">
+          <button className="headerSearchBtn" onClick={handleSearch}>
             <HiSearch className="headerIcon" />
           </button>
         </div>
