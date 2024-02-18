@@ -9,7 +9,8 @@ import { format } from "date-fns/esm";
 import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 
 export default function Header() {
-  const [destination, setDestination] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [destination, setDestination] = useState(searchParams.get("destination") || "");
   const [openOptions, setOpenOptions] = useState(false);
   const [options, setOptions] = useState({
     adult: 1,
@@ -38,7 +39,6 @@ export default function Header() {
 
   // Search Handler
   const navigate = useNavigate();
-  // const [searchParams, setSearchParams] = useSearchParams();
   const handleSearch = () => {
     const encodedParams = createSearchParams({
       date: JSON.stringify(date),
